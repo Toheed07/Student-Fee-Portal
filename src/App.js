@@ -1,9 +1,15 @@
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import Home from './routes/home/home';
 import NavScrollExample from "./routes/navigation/navigation"
 function App() {
   return (
     <div>
-      <NavScrollExample />
+      <Routes>
+        <Route path='/' element={<NavScrollExample />}>
+          <Route index element={<Home />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
