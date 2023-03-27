@@ -1,16 +1,19 @@
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import Home from './routes/home/home';
-import NavScrollExample from "./routes/navigation/navigation"
+import Home from "./routes/home/home";
+import NavBar from "./routes/navigation/navigation";
+import SignIn from "./components/sign-in-form/sign-in-form";
+import SignUp from "./components/sign-up-form/sign-up-form";
+
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+
 function App() {
   return (
-    <div>
-      <Routes>
-        <Route path='/' element={<NavScrollExample />}>
-          <Route index element={<Home />} />
-        </Route>
-      </Routes>
-    </div>
+    <Routes>
+     <Route path='/' element={<NavBar />} />
+      <Route index element={<NavBar />} />
+      <Route path="/sign-in" element={<SignIn />} />
+      <Route path="/sign-up" element={<SignUp />} />
+    </Routes>
   );
 }
 

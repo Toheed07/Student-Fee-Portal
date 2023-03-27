@@ -1,38 +1,46 @@
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Outlet, Link } from "react-router-dom";
+import React, { useState } from "react"
 
-function NavScrollExample() {
+import { useAuth } from "../../context/authContext"
+import { Link, useNavigate } from "react-router-dom"
+
+function NavBar() {
+  const [error, setError] = useState("")
+  const { currentUser, logout } = useAuth()
+  const navigate = useNavigate()
+
+  async function handleLogout() {
+    setError("")
+    try {
+      await logout()
+      navigate("/sign-in")
+    } catch {
+      setError("Failed to log out")
+    }
+  }
   return (
     <Navbar bg="light" expand="lg">
-      <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
-          >
-            <Link to="/home">Home</Link>
-            <Link to="/receipts">Receipts</Link>
-            <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <li>
-            <Link to="/contact">Contact</Link>
-          </li>
+      <Container>
+        <Navbar.Brand href="#">KGR FP</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#receipts">Receipts</Nav.Link>
+            <NavDropdown title="More" id="basic-nav-dropdown">
+              <NavDropdown.Item href="#settings">Settings</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">
+                Another action
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
+              <NavDropdown.Item href="#action/3.4" onClick={handleLogout}>
+                Log Out
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#" disabled>
-              Link
-            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -40,4 +48,4 @@ function NavScrollExample() {
   );
 }
 
-export default NavScrollExample;
+export default NavBar;
