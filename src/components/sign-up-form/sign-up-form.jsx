@@ -62,3 +62,29 @@ export default function SignUp() {
     </>
   );
 }
+/*
+<Form.Group id="firstname ">
+  <Form.Label>First Name</Form.Label>
+  <Form.Control type="text" ref={firstnameRef} required />
+</Form.Group>
+<Form.Group id="lastname">
+  <Form.Label>Lastname</Form.Label>
+  <Form.Control type="password" ref={passwordRef} required />
+</Form.Group>
+<Form.Group id="password">
+  <Form.Label>Password</Form.Label>
+  <Form.Control type="password" ref={passwordRef} required />
+</Form.Group>
+<Form.Group id="password">
+  <Form.Label>Password</Form.Label>
+  <Form.Control type="password" ref={passwordRef} required />
+</Form.Group>
+<Form.Group id="password">
+  <Form.Label>Password</Form.Label>
+  <Form.Control type="password" ref={passwordRef} required />
+</Form.Group>
+<Form.Group id="password">
+  <Form.Label>Password</Form.Label>
+  <Form.Control type="password" ref={passwordRef} required />
+</Form.Group>
+*/
