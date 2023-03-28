@@ -1,90 +1,116 @@
-import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert } from "react-bootstrap";
-import { useAuth } from "../../context/authContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-export default function SignUp() {
-  const firstnameRef = useRef();
-  const lastnameRef = useRef();
-  const roll_numberRef = useRef();
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
+import {
+  createAuthUserWithEmailAndPassword,
+  createUserDocumentFromAuth,
+} from "../../utils/firebase/firebase";
 
-  const { signup } = useAuth();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+import { FormWrapper, Form, Label, Input, Button } from "./sign-up-form.styles";
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+const SignUpForm = () => {
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [rollNumber, setRollNumber] = useState("");
+  const [department, setDepartment] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match");
+  const resetFormFields = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setRollNumber("");
+    setDepartment("");
+    setPassword("");
+    setConfirmPassword("");
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("passwords do not match");
+      return;
     }
 
     try {
-      setError("");
-      setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
-      navigate("/");
-    } catch {
-      setError("Failed to create an account");
+      const { user } = await createAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
+      await createUserDocumentFromAuth(user, { firstname,lastname,rollNumber,department,password });
+      resetFormFields();
+      console.log("user registration complete");
+    } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        alert("Cannot create user, email already in use");
+      } else {
+        console.log("user creation encountered an error", error);
+      }
     }
-
-    setLoading(false);
-  }
+  };
 
   return (
-    <>
-      <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Sign Up</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group id="firstname">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" ref={firstnameRef} required />
-            </Form.Group>
-            <Form.Group id="lastname">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" ref={lastnameRef} required />
-            </Form.Group>
-            <Form.Group id="department">
-              <Form.Label>Department</Form.Label>
-              <Form.Select>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Electrical Engineering">
-                  Electrical Engineering
-                </option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group id="roll_number">
-              <Form.Label>Roll Number</Form.Label>
-              <Form.Control type="text" ref={roll_numberRef} required />
-            </Form.Group>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef} required />
-            </Form.Group>
-            <Form.Group id="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" ref={passwordRef} required />
-            </Form.Group>
-            <Form.Group id="password-confirm">
-              <Form.Label>Password Confirmation</Form.Label>
-              <Form.Control type="password" ref={passwordConfirmRef} required />
-            </Form.Group>
+    <FormWrapper>
+      <h2>Sign Up</h2>
+      <Form onSubmit={handleSubmit}>
+        <Label>First Name</Label>
+        <Input
+          type="text"
+          value={firstname}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <Label>Last Name</Label>
+        <Input
+          type="text"
+          value={lastname}
+          onChange={(e) => setLastName(e.target.value)}
+        />
 
-            <Button disabled={loading} className="w-100" type="submit">
-              Sign Up
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-      <div className="w-100 text-center mt-2">
-        Already have an account? <Link to="/sign-in">Log In</Link>
-      </div>
-    </>
+        <Label>Email</Label>
+        <Input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <Label>Roll Number</Label>
+        <Input
+          type="text"
+          value={rollNumber}
+          onChange={(e) => setRollNumber(e.target.value)}
+        />
+
+        <Label>Department</Label>
+        <select
+          id="department"
+          name="department"
+          onChange={(e) => setDepartment(e.target.value)}
+        >
+          <option value=" "> </option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Electrical Engineering">Electrical Engineering</option>
+          <option value="Mechanical Engineering">Mechanical Engineering</option>
+        </select>
+        <Label>Password</Label>
+        <Input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <Label>Confirm Password</Label>
+        <Input
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+
+        <Button type="submit">Sign Up</Button>
+      </Form>
+    </FormWrapper>
   );
-}
+};
+
+export default SignUpForm;
