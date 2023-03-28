@@ -12,7 +12,7 @@ const SignUpForm = () => {
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [rollNumber, setRollNumber] = useState("");
-  const [department, setDepartment] = useState("");
+  const [departmentName, setDepartmentName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -21,7 +21,7 @@ const SignUpForm = () => {
     setLastName("");
     setEmail("");
     setRollNumber("");
-    setDepartment("");
+    setDepartmentName("");
     setPassword("");
     setConfirmPassword("");
   };
@@ -39,7 +39,7 @@ const SignUpForm = () => {
         email,
         password
       );
-      await createUserDocumentFromAuth(user, { firstname,lastname,rollNumber,department,password });
+      await createUserDocumentFromAuth(user, { firstname,lastname,email,rollNumber,departmentName,password });
       resetFormFields();
       console.log("user registration complete");
     } catch (error) {
@@ -86,7 +86,7 @@ const SignUpForm = () => {
         <select
           id="department"
           name="department"
-          onChange={(e) => setDepartment(e.target.value)}
+          onChange={(e) => setDepartmentName(e.target.value)}
         >
           <option value=" "> </option>
           <option value="Computer Science">Computer Science</option>

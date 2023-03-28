@@ -6,7 +6,16 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  where,
+  getDocs,
+  collection,
+  query,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB42rQ2zTwoaVVZOEuu_A5-V0rztXcuj90",
@@ -34,26 +43,43 @@ export const createUserDocumentFromAuth = async (
   const userSnapshot = await getDoc(userDocRef);
 
   if (!userSnapshot.exists()) {
-    const { firstname, lastname, rollNumber, department, password, email } =
+    const { firstname, lastname, rollNumber, departmentName, password, email } =
       userAuth;
+    const department = additionalInformation.departmentName.toString();
+    console.log(department);
     const createdAt = new Date();
 
-    try {
-      await setDoc(userDocRef, {
-        firstname,
-        lastname,
-        rollNumber,
-        department,
-        password,
-        email,
-        createdAt,
-        ...additionalInformation,
-      });
-    } catch (error) {
-      console.log("error creating the user", error.message);
+    //Getting fee from departments collection
+    const departmentsRef = collection(db, "departments");
+    const departmentsSnapshot = await getDocs(departmentsRef);
+
+    let departmentData = null;
+    departmentsSnapshot.forEach((doc) => {
+      if (doc.data().departmentName === department) {
+        departmentData = doc.data();
+      }
+    });
+    if (departmentData) {
+      const departmentFee = departmentData.fee;
+      try {
+        await setDoc(userDocRef, {
+          firstname,
+          lastname,
+          rollNumber,
+          departmentName,
+          password,
+          email,
+          departmentFee,
+          createdAt,
+          ...additionalInformation,
+        });
+      } catch (error) {
+        console.error("Error creating user document: ", error);
+      }
+    } else {
+      console.error("Department not found!");
     }
   }
-
   return userDocRef;
 };
 
@@ -83,3 +109,7 @@ export const onAuthStateChangedListener = (callback) =>
   appId: "1:173545797532:web:7b22b6569d3409d1237a59",
   measurementId: "G-XW0BGD6EWY",
 */
+
+// catch (error) {
+//   console.log("error creating the user", error.message);
+// }

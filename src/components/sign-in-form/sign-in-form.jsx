@@ -18,6 +18,7 @@ const SignUpForm = () => {
 
     try {
       await signInAuthUserWithEmailAndPassword(email, password);
+      alert("logged in");
       console.log("login complete");
       resetFormFields();
     } catch (error) {
