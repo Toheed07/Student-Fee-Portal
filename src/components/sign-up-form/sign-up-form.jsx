@@ -6,15 +6,19 @@ import {
 } from "../../utils/firebase/firebase";
 
 import { FormWrapper, Form, Label, Input, Button } from "./sign-up-form.styles";
+import { useNavigate } from "react-router-dom"
 
 const SignUpForm = () => {
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [departmentName, setDepartmentName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const isFeePaid = false;
+  const navigate = useNavigate()
+
 
   const resetFormFields = () => {
     setFirstName("");
@@ -39,9 +43,10 @@ const SignUpForm = () => {
         email,
         password
       );
-      await createUserDocumentFromAuth(user, { firstname,lastname,email,rollNumber,departmentName,password });
+      await createUserDocumentFromAuth(user, { firstName,lastName,email,rollNumber,departmentName,password,isFeePaid });
       resetFormFields();
       console.log("user registration complete");
+      navigate("/")
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Cannot create user, email already in use");
@@ -58,13 +63,13 @@ const SignUpForm = () => {
         <Label>First Name</Label>
         <Input
           type="text"
-          value={firstname}
+          value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
         <Label>Last Name</Label>
         <Input
           type="text"
-          value={lastname}
+          value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
 

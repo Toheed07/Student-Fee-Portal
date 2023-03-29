@@ -2,12 +2,18 @@ import React from "react";
 import { Pie } from "react-chartjs-2";
 import 'chart.js/auto';
 
+const feeDistribution={
+  Tution: "Tution",
+  CRT: "CRT",
+  DSA: "DSA"
+}
+
+
 const data = {
-  labels: ["Red", "Blue", "Yellow"],
+  labels: [feeDistribution.Tution, feeDistribution.CRT,feeDistribution.DSA],
   datasets: [
     {
-      label: "My First Dataset",
-      data: [300, 50, 100],
+      data: [300, 100, 50],
       backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
       hoverOffset: 4,
     },
@@ -18,7 +24,7 @@ const options = {
   plugins: {
     title: {
       display: true,
-      text: "My Pie Chart",
+      text: "Fee Distribution",
     },
   },
 };

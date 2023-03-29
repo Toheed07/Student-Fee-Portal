@@ -43,8 +43,15 @@ export const createUserDocumentFromAuth = async (
   const userSnapshot = await getDoc(userDocRef);
 
   if (!userSnapshot.exists()) {
-    const { firstname, lastname, rollNumber, departmentName, password, email } =
-      userAuth;
+    const {
+      firstName,
+      lastName,
+      rollNumber,
+      departmentName,
+      password,
+      email,
+      isFeePaid,
+    } = userAuth;
     const department = additionalInformation.departmentName.toString();
     console.log(department);
     const createdAt = new Date();
@@ -61,15 +68,21 @@ export const createUserDocumentFromAuth = async (
     });
     if (departmentData) {
       const departmentFee = departmentData.fee;
+      const feePaid = 0;
+      const feeLeft = departmentFee - feePaid;
+
       try {
         await setDoc(userDocRef, {
-          firstname,
-          lastname,
+          firstName,
+          lastName,
           rollNumber,
           departmentName,
           password,
           email,
           departmentFee,
+          isFeePaid,
+          feePaid,
+          feeLeft,
           createdAt,
           ...additionalInformation,
         });
@@ -77,6 +90,7 @@ export const createUserDocumentFromAuth = async (
         console.error("Error creating user document: ", error);
       }
     } else {
+      alert("User not created")
       console.error("Department not found!");
     }
   }
@@ -99,6 +113,13 @@ export const signOutUser = async () => await signOut(auth);
 
 export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
+
+export const fetchStudent = async (userId) => {
+  const userRef = doc(db, 'students', userId);
+  const userDoc = await getDoc(userRef);
+  const userData = userDoc.data();
+  return userData;
+};
 
 /*
   apiKey: "AIzaSyB42rQ2zTwoaVVZOEuu_A5-V0rztXcuj90",

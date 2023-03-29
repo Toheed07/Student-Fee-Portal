@@ -2,11 +2,12 @@ import { useState } from "react";
 import { signInAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase";
 
 import { FormWrapper, Form, Label, Input, Button } from "./sign-in-form.styles";
+import { useNavigate } from "react-router-dom"
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
 
   const resetFormFields = () => {
     setEmail("");
@@ -20,10 +21,13 @@ const SignUpForm = () => {
       await signInAuthUserWithEmailAndPassword(email, password);
       alert("logged in");
       console.log("login complete");
+      navigate("/")
       resetFormFields();
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Cannot create user, email already in use");
+      }else if(error.code === "auth/user-not-found"){
+        alert("Wrong email or password");
       } else {
         console.log("user creation encountered an error", error);
       }
@@ -39,6 +43,7 @@ const SignUpForm = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <Label>Password</Label>
@@ -46,6 +51,7 @@ const SignUpForm = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
         <Button type="submit">Sign In</Button>
