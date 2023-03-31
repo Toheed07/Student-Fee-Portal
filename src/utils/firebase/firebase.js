@@ -11,10 +11,11 @@ import {
   doc,
   getDoc,
   setDoc,
-  where,
   getDocs,
   collection,
   query,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -90,7 +91,7 @@ export const createUserDocumentFromAuth = async (
         console.error("Error creating user document: ", error);
       }
     } else {
-      alert("User not created")
+      alert("User not created");
       console.error("Department not found!");
     }
   }
@@ -115,10 +116,23 @@ export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
 
 export const fetchStudent = async (userId) => {
-  const userRef = doc(db, 'students', userId);
+  const userRef = doc(db, "students", userId);
   const userDoc = await getDoc(userRef);
   const userData = userDoc.data();
   return userData;
+};
+
+// To fetch Notifications
+
+export const fetchNotifications = async (limitNum) => {
+  try {
+    const q = query(collection(db, 'notifications'), limit(limitNum));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => doc.data());
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 };
 
 /*

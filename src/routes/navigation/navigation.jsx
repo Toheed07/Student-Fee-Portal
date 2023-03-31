@@ -29,9 +29,10 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/notifications">Notifications</Nav.Link>
             <Nav.Link href="/profile">Profile</Nav.Link>
+            <Nav.Link href="/receipts">Receipts</Nav.Link>
             <NavDropdown title="More" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/receipts">Receipts</NavDropdown.Item>
               <NavDropdown.Item href="#settings">Settings</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4" onClick={handleLogout}>

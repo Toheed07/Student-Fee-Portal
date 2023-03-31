@@ -5,6 +5,7 @@ import SignUpForm from "./components/sign-up-form/sign-up-form";
 import Profile from "./routes/profile/profile.jsx";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import AllNotification from "./components/all-notifications/all-notification";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route path="/sign-in" element={<SignInForm />} />
         <Route path="/sign-up" element={<SignUpForm />} />
         <Route path="/profile" element={<Profile />} />
-
+        <Route path="/notifications" element={<AllNotification />} />
       </Routes>
     </>
   );
