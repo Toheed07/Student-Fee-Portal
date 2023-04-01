@@ -1,62 +1,58 @@
-import React, { useContext, useState, useEffect } from "react"
-import { auth } from "../utils/firebase/firebase"
+import React, { useContext, useState, useEffect } from "react";
+import { auth, fetchStudent } from "../utils/firebase/firebase";
 
-const AuthContext = React.createContext()
+const AuthContext = React.createContext();
 
 export function useAuth() {
-  return useContext(AuthContext)
+  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState()
-  const [loading, setLoading] = useState(true)
+  const [currentUser, setCurrentUser] = useState();
 
   function signup(email, password) {
-    return auth.createUserWithEmailAndPassword(email, password)
+    if (!email || !password) return;
+    return auth.createUserWithEmailAndPassword(email, password);
   }
 
   function login(email, password) {
-    return auth.signInWithEmailAndPassword(email, password)
+    if (!email || !password) return;
+    return auth.signInWithEmailAndPassword(email, password);
   }
 
   function logout() {
-    return auth.signOut()
-  }
-
-  function resetPassword(email) {
-    return auth.sendPasswordResetEmail(email)
-  }
-
-  function updateEmail(email) {
-    return currentUser.updateEmail(email)
-  }
-
-  function updatePassword(password) {
-    return currentUser.updatePassword(password)
+    return auth.signOut();
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setCurrentUser(user)
-      setLoading(false)
-    })
+    //console.log(auth);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        const userId = user.uid;
+        // console.log(userId)
+        const getUserData = async () => {
+          const userData = await fetchStudent(userId);
+          setCurrentUser(userData);
+        };
+        getUserData();
+      } else {
+        setCurrentUser(null);
+      }
+    });
 
-    return unsubscribe
-  }, [])
+    return unsubscribe;
+  }, []);
 
   const value = {
     currentUser,
     login,
     signup,
     logout,
-    resetPassword,
-    updateEmail,
-    updatePassword
-  }
+  };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      { children}
     </AuthContext.Provider>
-  )
+  );
 }

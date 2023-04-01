@@ -1,15 +1,24 @@
-import Box from "../../components/box/box";
-import Dashboard from "../../components/dashboard/dashboard";
+import Box from "../../components/fee-box/box";
+import React from "react";
+import NotificationTableHome from "../../components/notification/notification";
+import { useAuth } from "../../context/authContext";
+
 
 const Home = () => {
+  const { currentUser } = useAuth() ?? {};
+  
+  // console.log(currentUser);
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Box value="26K" title={"Fee paid"} />
-        <Box value="14K" title={"Fee left"} />
-        <Box value="40K" title={"Total fee"} />
+        <Box value={currentUser && currentUser.feePaid} title={"Fee paid"} />
+        <Box value={currentUser && currentUser.feeLeft} title={"Fee due"} />
+        <Box
+          value={currentUser && currentUser.departmentFee}
+          title={"Total fee"}
+        />
       </div>
-      <Dashboard />
+      <NotificationTableHome />
     </div>
   );
 };
