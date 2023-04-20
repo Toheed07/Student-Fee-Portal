@@ -13,7 +13,7 @@ function NavBar() {
   const { currentUser, logout, userRole } = useAuth();
   const navigate = useNavigate();
 
-  async function handleLogout() {
+  const handleLogout = async () => {
     setError("");
     try {
       await logout();
@@ -22,7 +22,9 @@ function NavBar() {
       setError("Failed to log out");
     }
   }
-
+  const handleLogIn = () => {
+    navigate("/sign-in")
+  }
   return (
     <>
       {currentUser ? (
@@ -77,26 +79,26 @@ function NavBar() {
         </div>
       ) : (
         <Navbar bg="light" expand="lg">
-              <Container>
-                <Navbar.Brand href="/">KGR FP</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                  <Nav className="me-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/notifications">Notifications</Nav.Link>
-                    <Nav.Link href="/profile">Profile</Nav.Link>
-                    <Nav.Link href="/">Receipts</Nav.Link>
-                    <NavDropdown title="More" id="basic-nav-dropdown">
-                      <NavDropdown.Item href="">Settings</NavDropdown.Item>
-                      <NavDropdown.Divider />
-                      <NavDropdown.Item onClick={handleLogout}>
-                        Log Out
-                      </NavDropdown.Item>
-                    </NavDropdown>
-                  </Nav>
-                </Navbar.Collapse>
-              </Container>
-            </Navbar>
+          <Container>
+            <Navbar.Brand href="/">KGR FP</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link href="/">Home</Nav.Link>
+                <Nav.Link href="/notifications">Notifications</Nav.Link>
+                <Nav.Link href="/profile">Profile</Nav.Link>
+                <Nav.Link href="/">Receipts</Nav.Link>
+                <NavDropdown title="More" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="">Settings</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={handleLogIn}>
+                      Log In
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
       )}
     </>
   );

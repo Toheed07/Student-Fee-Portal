@@ -85,6 +85,7 @@ export const createUserDocumentFromAuth = async (
           isFeePaid,
           feePaid,
           feeDue,
+          
           createdAt,
           ...additionalInformation,
         });

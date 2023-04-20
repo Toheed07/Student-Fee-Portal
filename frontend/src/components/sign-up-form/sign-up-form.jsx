@@ -59,7 +59,10 @@ const SignUpForm = () => {
       }
     }
   };
-
+  const handleLogIn =
+    () => {
+      navigate("/sign-in")
+    }
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group controlId="formFirstName">
@@ -145,6 +148,9 @@ const SignUpForm = () => {
 
       <Button variant="primary" type="submit">
         Sign Up
+      </Button>
+      <Button variant="secondary" onClick={handleLogIn}>
+        Log In
       </Button>
     </Form>
   );
