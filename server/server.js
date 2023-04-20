@@ -40,21 +40,61 @@ app.get("/config", (req, res) => {
   });
 });
 
+// app.post("/payment", cors(), async (req, res) => {
+//   let { amount, id, email } = req.body;
+
+//   try {
+//     const payment = await stripe.paymentIntents.create({
+//       amount: amount * 100,
+//       currency: "INR",
+//       description: "Payment",
+//       payment_method_types: ["card"],
+//       payment_method: id,
+//       confirm: true,
+//       off_session: true,
+//       receipt_email: email,
+
+//     });
+
+//     console.log("Payment", payment);
+
+//     const receipt = await stripe.paymentIntents.sendReceipt(
+//       payment.id,
+//       { email: payment.receipt_email }
+//     );
+
+//     res.json({
+//       message: "Payment was successful",
+//       success: true,
+//     });
+
+//   } catch (error) {
+//     console.log("Error", error);
+//     res.json({
+//       message: "Payment Failed",
+//       success: false,
+//     });
+//   }
+// });
+
 app.post("/payment", cors(), async (req, res) => {
-  let { amount, id } = req.body;
+  let { amount, id, email } = req.body;
 
   try {
-    const payment = await stripe.paymentIntents.create({
+    const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100,
       currency: "INR",
       description: "Payment",
       payment_method_types: ["card"],
       payment_method: id,
       confirm: true,
-      off_session: true
+      off_session: true,
+      receipt_email: email,
+      // receipt_template: "your_receipt_template_id_here",
     });
 
-    console.log("Payment", payment);
+    console.log("Payment", paymentIntent);
+
     res.json({
       message: "Payment was successful",
       success: true,
@@ -67,7 +107,6 @@ app.post("/payment", cors(), async (req, res) => {
     });
   }
 });
-
 
 app.listen(5252, () =>
   console.log(`Node server listening at http://localhost:5252`)
