@@ -1,1 +1,4 @@
-{}
+{
+    "terminal.integrated.shellIntegration.suggestEnabled": true,
+    "terminal.integrated.defaultProfile.windows": ""
+}
